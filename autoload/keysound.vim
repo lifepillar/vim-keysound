@@ -49,14 +49,14 @@ def PlaySoundFor(keyOrEvent: string): string
   const soundFile = SoundFileFor(keyOrEvent)
 
   if !empty(soundFile) && gPlayingSounds < gMaxPlayingSounds
-      gPlayingSounds += 1
+    gPlayingSounds += 1
 
-      if sound_playfile(soundFile, (id, _) => {
-        gPlayingSounds -= 1
-      }) == 0
-        gPlayingSounds -= 1
-      endif
+    if sound_playfile(soundFile, (id, _) => {
+      gPlayingSounds -= 1
+    }) == 0
+    gPlayingSounds -= 1
     endif
+  endif
 
   return keyOrEvent
 enddef
