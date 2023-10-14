@@ -49,27 +49,36 @@ By default, KeySound plays a sound for each key triggered by |InsertCharPre|.
 It also plays a "carriage return" sound when pressing |<Enter>|.
 
 						*g:keysound*
-A |dict| to configure which sounds should be played for each key press.
+A |dict| to configure which sounds should be played for each key press. This
+is the default configuration:
 >
 	g:keysound = {
-	    'default': ['keyup.mp3'],
-	    "\<cr>":   ['newline.mp3'],
+	  'default': [
+	    'freesound/1.wav',
+	    'freesound/2.wav',
+	    'freesound/3.wav'
+	  ],
+	  "\<cr>": ['freesound/carriage1.wav'],
 	}
 <
-The dictionary maps keys to lists of sound files. The special `'default'`
-entry is used for keys that are not explicitly defined in the dictionary.
+Users may define `g:keysound` in their |vimrc| to extend or override the
+default configuration. The dictionary maps keys or events to lists of sound
+files. The special `'default'` entry is used for keys that are not explicitly
+defined in `g:keysound`. Keys may also be the names of |autocmd-events|.
 
-When a key is associated with more than one sound, a sound is chosen randomly
-each time that key is pressed. To suppress a sound for a specific key, map it
-to an empty list or use |null_string| or an empty string. For example:
+When a key or event is associated with more than one sound, a sound is chosen
+randomly each time that key is pressed or that event is triggered. To suppress
+a sound for a specific key, map it to an empty list or use |null_string| or an
+empty string. For example:
 >
 	g:keysound = {
-	    "\<bs>":   ['kick.mp3'],
-	    'f':       ['keystroke.mp3'],
-	    'q':       ['keydown.mp3', 'keyup.mp3', ''],
-	    'j':       [],
-	    'k':       [null_string],
-	    'default': ['keydown.mp3'],
+	    "\<bs>":       ['daktilo/kick.mp3'],
+	    'f':           ['daktilo/keystroke.mp3'],
+	    'q':           ['daktilo/keydown.mp3', 'daktilo/keyup.mp3', ''],
+	    'j':           [],
+	    'k':           [null_string],
+	    'default':     ['daktilo/keydown.mp3'],
+            'InsertLeave': ['freesound/ding1.wav'],
 	}
 <
 With the configuration above:
@@ -81,12 +90,14 @@ With the configuration above:
 - pressing `j` will not play any sound;
 - pressing `k` will also not play any sound;
 - any other key triggering |InsertCharPre| will play `keydown.mp3`;
-- pressing Enter will play the default sound for carriage return;
-- the remaining keys will not play any sound.
+- pressing Enter will play the default sound for carriage return (see the
+  default configuration);
+- the remaining keys will not play any sound;
+- finally, `ding1.wav` will be played each time Insert mode is exited.
 
 Keys that do not trigger |InsertCharPre|, such as |<Enter>|, |backspace|,
-etc., must not be mapped (see |key-mapping|) for KeySound to be able to
-configure them, because KeySound will need to map those keys. If a mapping
+etc., must not be mapped for KeySound to be able to configure them (see
+|key-mapping|), because KeySound will need to map those keys. If a mapping
 already exists, KeySound will not overwrite it: you will need to set up the
 mappings yourself.
 
@@ -94,11 +105,28 @@ The available sound files are located inside the `sounds` folder of the
 plugin. You may add your own sounds there. The supported formats vary with the
 platform, but at least `.wav` and `.mp3` files should work.
 
+						*g:keysound_throttle*
+Maximum number of simultaneous sounds to play. When typing fast and this
+threshold is exceeded, sounds are skipped for additional key presses long as
+the number of simultaneously playing sounds is higher that the threshold. The
+threshold must be a positive value.
+>
+	g:keysound_throttle = 20
+<
 CREDITS
 
 - ASCII art: https://asciiart.website/index.php?art=objects/typewriter
-- Sounds:
-  - keydown.mp3, keystroke.mp3, keyup.mp3, kick.mp3, newline.mp3 are from
-    daktilo (https://github.com/orhun/daktilo).
+- Sound folders:
+  - daktilo: https://github.com/orhun/daktilo
+  - freesound: https://freesound.org/people/_stubb/sounds/406243/,
+    https://freesound.org/people/tjandrasounds/sounds/201590/,
+    https://freesound.org/people/ramsamba/sounds/318686/
+  - skywind3000: https://github.com/skywind3000/vim-keysound (I discovered
+    that a plugin called keysound existed after I named my own!)
+
+SEE ALSO
+
+https://github.com/AndrewRadev/typewriter.vim: a similar plugin, in legacy Vim
+script, from which I borrowed the idea of throttling the sounds.
 
  vim:tw=78:ts=8:ft=help:norl:

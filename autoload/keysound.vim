@@ -7,12 +7,14 @@ const SLASH      = !exists("+shellslash") || &shellslash ? '/' : '\'
 const SOUNDS_DIR = $"{resolve(expand('<sfile>:p:h:h'))}{SLASH}sounds{SLASH}"
 
 const DEFAULT_SOUNDS: dict<list<string>> = {
-  'default': ['keyup.mp3'],
-    "\<cr>": ['newline.mp3'],
+  'default': ['freesound/1.wav', 'freesound/2.wav', 'freesound/3.wav'],
+    "\<cr>": ['freesound/carriage1.wav'],
 }
 
-var gSounds = DEFAULT_SOUNDS
-var gMappedKeys: list<string> = []  # Keeps track of keys mapped by this plugin
+var gSounds                         = DEFAULT_SOUNDS
+var gMappedKeys:       list<string> = [] # Keeps track of keys mapped by this plugin
+var gPlayingSounds:    number            # Number of simultaneously playing sounds
+var gMaxPlayingSounds: number            # Maximum number of simultaneously playing sounds
 
 
 def SoundPath(soundFile: string): string
@@ -43,14 +45,20 @@ def SoundFileFor(key: string): string
   return sounds[rand() % n]
 enddef
 
-def KeyClick(key: string): string
-  const soundFile = SoundFileFor(key)
+def PlaySoundFor(keyOrEvent: string): string
+  const soundFile = SoundFileFor(keyOrEvent)
 
-  if !empty(soundFile)
-    sound_playfile(soundFile)
-  endif
+  if !empty(soundFile) && gPlayingSounds < gMaxPlayingSounds
+      gPlayingSounds += 1
 
-  return key
+      if sound_playfile(soundFile, (id, _) => {
+        gPlayingSounds -= 1
+      }) == 0
+        gPlayingSounds -= 1
+      endif
+    endif
+
+  return keyOrEvent
 enddef
 
 def HasSoundFor(theKeymap: dict<list<string>>, key: string): bool
@@ -62,11 +70,11 @@ def IsSpecial(key: string): bool
 enddef
 
 def IsUnmapped(key: string): bool
-  return empty(mapcheck(key, 'i'))
+  return empty(mapcheck(keytrans(key), 'i'))
 enddef
 
 def MapSpecialKey(key: string)
-  execute $'inoremap <expr> {keytrans(key)} KeyClick("{key}")'
+  execute $'inoremap <expr> {keytrans(key)} PlaySoundFor("{key}")'
   gMappedKeys->add(key)
 enddef
 
@@ -89,18 +97,26 @@ def UnmapSpecialKeys()
 enddef
 
 def Enable()
-  augroup KeySound
-    autocmd!
-    autocmd InsertCharPre * KeyClick(v:char)
-  augroup END
-
   var userConfig = deepcopy(get(g:, 'keysound', {}))
 
-  gSounds = deepcopy(DEFAULT_SOUNDS)->extend(userConfig, 'force')
+  gPlayingSounds    = 0
+  gMaxPlayingSounds = get(g:, 'keysound_throttle', 20)
+  gSounds           = deepcopy(DEFAULT_SOUNDS)->extend(userConfig, 'force')
 
   for soundFiles in values(gSounds)
     map(soundFiles, (_, sound) => SoundPath(sound))
   endfor
+
+  augroup KeySound
+    autocmd!
+    autocmd InsertCharPre * PlaySoundFor(v:char)
+
+    for event in keys(gSounds)
+      if exists($'##{event}')
+        execute $"autocmd {event} * PlaySoundFor('{event}')"
+      endif
+    endfor
+  augroup END
 
   MapSpecialKeys()
 
@@ -136,9 +152,10 @@ export def Toggle()
   endif
 enddef
 
-export def Debug()
-  echomsg gSounds
+export def Preset(name: string)
+enddef
 
+export def Debug()
   const mappedKeys = mapnew(gMappedKeys, (_, key) => keytrans(key))
   const config = values(
     mapnew(gSounds, (key, paths) => {
@@ -152,7 +169,7 @@ export def Debug()
   SOUNDS DIRECTORY:
   {SOUNDS_DIR}
 
-  MAPPED KEYS:
+  MAPPED KEYS AND EVENTS:
   {mappedKeys}
 
   KEYSOUND CONFIGURATION:
