@@ -103,6 +103,8 @@ def Enable()
   endfor
 
   MapSpecialKeys()
+
+  echomsg '[KeySound] On'
 enddef
 
 def Disable()
@@ -110,6 +112,8 @@ def Disable()
   augroup! KeySound
 
   UnmapSpecialKeys()
+
+  echomsg '[KeySound] Off'
 enddef
 
 export def On()
