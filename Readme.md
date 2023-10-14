@@ -56,6 +56,9 @@ sounds with `:KeySoundToggle`.
 Sounds for each key press can be configured by defining `g:keysound` in your
 `vimrc`. See `:help keysound.txt` for the details.
 
+## License
+
+Vim license.
 
 ## Credits
 
