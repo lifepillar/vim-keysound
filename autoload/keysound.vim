@@ -65,8 +65,12 @@ def HasSoundFor(theKeymap: dict<list<string>>, key: string): bool
   return !empty(theKeymap->get(key, []))
 enddef
 
-def IsSpecial(key: string): bool
-  return len(keytrans(key)) > 1 && key != 'default' && key != "\<space>"
+def IsEvent(name: string): bool
+  return exists($'##{name}')
+enddef
+
+def IsSpecialKey(key: string): bool
+  return len(keytrans(key)) > 1 && key != 'default' && key != "\<space>" && !IsEvent(key)
 enddef
 
 def IsUnmapped(key: string): bool
@@ -80,7 +84,7 @@ enddef
 
 def MapSpecialKeys()
   for key in gSounds->keys()
-    if IsSpecial(key) && IsUnmapped(key) && gSounds->HasSoundFor(key)
+    if IsSpecialKey(key) && IsUnmapped(key) && gSounds->HasSoundFor(key)
       MapSpecialKey(key)
     endif
   endfor
@@ -112,7 +116,7 @@ def Enable()
     autocmd InsertCharPre * PlaySoundFor(v:char)
 
     for event in keys(gSounds)
-      if exists($'##{event}')
+      if IsEvent(event)
         execute $"autocmd {event} * PlaySoundFor('{event}')"
       endif
     endfor
