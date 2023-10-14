@@ -115,9 +115,9 @@ def Enable()
     autocmd!
     autocmd InsertCharPre * PlaySoundFor(v:char)
 
-    for event in keys(gSounds)
-      if IsEvent(event)
-        execute $"autocmd {event} * PlaySoundFor('{event}')"
+    for name in keys(gSounds)
+      if IsEvent(name)
+        execute $"autocmd {name} * PlaySoundFor('{name}')"
       endif
     endfor
   augroup END
