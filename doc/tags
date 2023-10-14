@@ -1,0 +1,7 @@
+:KeySoundDebug	keysound.txt	/*:KeySoundDebug*
+:KeySoundOff	keysound.txt	/*:KeySoundOff*
+:KeySoundOn	keysound.txt	/*:KeySoundOn*
+:KeySoundToggle	keysound.txt	/*:KeySoundToggle*
+g:keysound	keysound.txt	/*g:keysound*
+keysound	keysound.txt	/*keysound*
+keysound.txt	keysound.txt	/*keysound.txt*

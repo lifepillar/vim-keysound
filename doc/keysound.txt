@@ -1,0 +1,103 @@
+*keysound.txt*	For Vim version 9.0	Last change: 2023 Oct 14
+
+	                            /`*_ ~
+	                            /    `-_ ~
+	                 _.,  _.   /        `-_ ~
+	             _,-` __`-_ `-/            `-_ ~
+	          ,-  .,~`  /  `-/               .` ~
+	         :_ -`     "    /`-@             / ~
+	                  /`\  ;    `-_         / ~
+	               |-`.. `-\  |    `-_     / `-_ ~
+	            _-`  `_.`\  `-_ |;\   @-_ / `-_/ ~
+	           -  .__.,,;___o  `-_|      /`-__-_ ~
+	          - 1`-_ .~--` _~` o   `-_   ;   `   - ~
+	        .`Q W 2 `-_ `,`. /- - o   `-_\  `     ` ~
+	       - A S  E  3 `-_  . / .|   _ ..`-_;     : ~
+	    _-` Z X  D F R T 4`-_  ;  ;   `_ `_-`.-_,` ~
+	 .-`--_     C   G   Y  5 `-_ i    _-`    ; ~
+	:  `-_//`-_   V  H J U I 6  `-_.-`       * ~
+	-_    `-_  `-_    B N K L O 7 -          : ~
+	  `-_    `-_  `-_    M . ; P .`      es  ; ~
+	     `-_    `-_  `-_     ,  -           _` ~
+	        `-_    `-_ /     -`         _-` ~
+	           `-_    `-_/-_`        _-` ~
+	              `-_    `-.      _-` ~
+	                 `-_   .   .-` ~
+	                    `-_:_-`  Dedicated to the memory of Bram~
+
+	Author:  Lifepillar <https://github.com/lifepillar>
+	License: Same terms as Vim itself (see |license|)
+==============================================================================
+KEYSOUND					*keysound*
+
+KeySound adds typewriter sounds to Vim in |Insert-mode|. It requires Vim 9.0
+or later compiled with |+sound|.
+
+						*:KeySoundDebug*
+:KeySoundDebug		Print debugging information in a dialog.
+
+						*:KeySoundOff*
+:KeySoundOff		Turn off typewriter sounds.
+
+						*:KeySoundOn*
+:KeySoundOn		Activate typewriter sounds.
+
+						*:KeySoundToggle*
+:KeySoundToggle		Toggle typewriter sounds.
+
+By default, KeySound plays a sound for each key triggered by |InsertCharPre|.
+It also plays a "carriage return" sound when pressing |<Enter>|.
+
+						*g:keysound*
+A |dict| to configure which sounds should be played for each key press.
+>
+	g:keysound = {
+	    'default': ['keydown.mp3'],
+	    "\<cr>":   ['kick.mp3'],
+	}
+<
+The dictionary maps keys to lists of sound files. The special `'default'`
+entry is used for keys that are not explicitly defined in the dictionary.
+
+When a key is associated with more than one sound, a sound is chosen randomly
+each time that key is pressed. To suppress a sound for a specific key, map it
+to an empty list or use |null_string| or an empty string. For example:
+>
+	g:keysound = {
+	    "\<cr>":   ['newline.mp3'],
+	    "\<bs>":   ['kick.mp3'],
+	    'f':       ['keystroke.mp3'],
+	    'q':       ['keydown.mp3', 'keyup.mp3', ''],
+	    'j':       [],
+	    'k':       [null_string],
+	    'default': ['keydown.mp3'],
+	}
+<
+With the configuration above:
+
+- pressing Enter will play `newline.mp3`;
+- pressing Backspace will play `kick.mp3`;
+- pressing `f` will play `keystroke.mp3`;
+- pressing `q` will randomly play one of `keydown.mp3` or `keyup.mp3` or no
+  sound.
+- pressing `j` will not play any sound;
+- pressing `k` will not play any sound;
+- any other key triggering |InsertCharPre| will play `keydown.mp3`.
+
+Keys that do not trigger |InsertCharPre|, such as |<Enter>|, |backspace|,
+etc., must not be mapped (see |key-mapping|), because KeySound will need to
+map those keys. If a mapping already exists, KeySound will not overwrite it:
+you will need to set up the mappings yourself.
+
+The available sound files are located inside the `sounds` folder of the
+plugin. You may add your own sounds there. The supported formats vary with the
+platform, but at least `.wav` and `.mp3` files should work.
+
+CREDITS
+
+- ASCII art: https://asciiart.website/index.php?art=objects/typewriter
+- Sounds:
+  - keydown.mp3, keystroke.mp3, keyup.mp3, kick.mp3, newline.mp3 are from
+    daktilo (https://github.com/orhun/daktilo).
+
+ vim:tw=78:ts=8:ft=help:norl:
