@@ -156,9 +156,6 @@ export def Toggle()
   endif
 enddef
 
-export def Preset(name: string)
-enddef
-
 export def Debug()
   const mappedKeys = mapnew(gMappedKeys, (_, key) => keytrans(key))
   const config = values(
