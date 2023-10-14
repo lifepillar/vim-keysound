@@ -52,8 +52,8 @@ It also plays a "carriage return" sound when pressing |<Enter>|.
 A |dict| to configure which sounds should be played for each key press.
 >
 	g:keysound = {
-	    'default': ['keydown.mp3'],
-	    "\<cr>":   ['kick.mp3'],
+	    'default': ['keyup.mp3'],
+	    "\<cr>":   ['newline.mp3'],
 	}
 <
 The dictionary maps keys to lists of sound files. The special `'default'`
@@ -64,7 +64,6 @@ each time that key is pressed. To suppress a sound for a specific key, map it
 to an empty list or use |null_string| or an empty string. For example:
 >
 	g:keysound = {
-	    "\<cr>":   ['newline.mp3'],
 	    "\<bs>":   ['kick.mp3'],
 	    'f':       ['keystroke.mp3'],
 	    'q':       ['keydown.mp3', 'keyup.mp3', ''],
@@ -75,19 +74,21 @@ to an empty list or use |null_string| or an empty string. For example:
 <
 With the configuration above:
 
-- pressing Enter will play `newline.mp3`;
 - pressing Backspace will play `kick.mp3`;
 - pressing `f` will play `keystroke.mp3`;
 - pressing `q` will randomly play one of `keydown.mp3` or `keyup.mp3` or no
   sound.
 - pressing `j` will not play any sound;
-- pressing `k` will not play any sound;
-- any other key triggering |InsertCharPre| will play `keydown.mp3`.
+- pressing `k` will also not play any sound;
+- any other key triggering |InsertCharPre| will play `keydown.mp3`;
+- pressing Enter will play the default sound for carriage return;
+- the remaining keys will not play any sound.
 
 Keys that do not trigger |InsertCharPre|, such as |<Enter>|, |backspace|,
-etc., must not be mapped (see |key-mapping|), because KeySound will need to
-map those keys. If a mapping already exists, KeySound will not overwrite it:
-you will need to set up the mappings yourself.
+etc., must not be mapped (see |key-mapping|) for KeySound to be able to
+configure them, because KeySound will need to map those keys. If a mapping
+already exists, KeySound will not overwrite it: you will need to set up the
+mappings yourself.
 
 The available sound files are located inside the `sounds` folder of the
 plugin. You may add your own sounds there. The supported formats vary with the
