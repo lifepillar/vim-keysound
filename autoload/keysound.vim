@@ -32,8 +32,8 @@ def SoundPath(soundFile: string): string
   return fullPath
 enddef
 
-def SoundFileFor(key: string): string
-  const sounds = gSounds->get(key, gSounds->get('default', []))
+def SoundFileFor(keyOrEvent: string): string
+  const sounds = gSounds->get(keyOrEvent, gSounds->get('default', []))
   const n = len(sounds)
 
   if n == 0
