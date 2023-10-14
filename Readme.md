@@ -25,12 +25,13 @@
                      `-_   .   .-`
                         `-_:_-`  Dedicated to the memory of Bram
 
-KeySound adds typewriter sounds to Vim in Insert mode. It requires Vim 9.0
-or later compiled with `+sound`. Features:
+KeySound adds typewriter sounds to Vim in Insert mode. It can also associate
+sounds to any auto-command event. It requires Vim 9.0 or later compiled with
+`+sound`. Features:
 
 - customize sounds;
-- define different sounds for different keys;
-- define multiple sounds for the same key (randomization);
+- define distinct sounds for distinct keys or events;
+- define multiple sounds for the same key or event (randomization);
 - disable sounds for specific keys.
 
 *Happy writing!*
