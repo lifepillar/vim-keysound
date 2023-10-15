@@ -117,4 +117,7 @@ https://github.com/AndrewRadev/typewriter.vim
 typewriter.vim is a plugin similar to KeySound, but written in legacy Vim
 script, from which I borrowed the idea of throttling the sounds.
 
+https://asciiart.website/index.php?art=objects/typewriter
+Where the ASCII art typewriter in this help file comes from.
+
  vim:tw=78:ts=8:ft=help:norl:
