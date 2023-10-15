@@ -53,12 +53,8 @@ A |dict| to configure which sounds should be played for each key press. This
 is the default configuration:
 >
 	g:keysound = {
-	  'default': [
-	    'freesound/1.wav',
-	    'freesound/2.wav',
-	    'freesound/3.wav'
-	  ],
-	  "\<cr>": ['freesound/carriage1.wav'],
+	  'default': ['key.mp3'],
+	    "\<cr>": ['return.mp3'],
 	}
 <
 Users may define `g:keysound` in their |vimrc| to extend or override the
@@ -72,28 +68,26 @@ a sound for a specific key, map it to an empty list or use |null_string| or an
 empty string. For example:
 >
 	g:keysound = {
-	    "\<bs>":       ['daktilo/kick.mp3'],
-	    'f':           ['daktilo/keystroke.mp3'],
-	    'q':           ['daktilo/keydown.mp3', 'daktilo/keyup.mp3', ''],
+	    "\<bs>":       ['key1.mp3'],
+	    'f':           ['key2.mp3'],
+	    'q':           ['key3.mp3', 'key4.wav', ''],
 	    'j':           [],
 	    'k':           [null_string],
-	    'default':     ['daktilo/keydown.mp3'],
-            'InsertLeave': ['freesound/ding1.wav'],
+	    'default':     ['key5.wav'],
+            'InsertLeave': ['ding.mp3'],
 	}
 <
 With the configuration above:
 
-- pressing Backspace will play `kick.mp3`;
-- pressing `f` will play `keystroke.mp3`;
-- pressing `q` will randomly play one of `keydown.mp3` or `keyup.mp3` or no
-  sound.
-- pressing `j` will not play any sound;
-- pressing `k` will also not play any sound;
-- any other key triggering |InsertCharPre| will play `keydown.mp3`;
-- pressing Enter will play the default sound for carriage return (see the
-  default configuration);
+- pressing Backspace will play key1.mp3;
+- pressing f will play key2.mp3;
+- pressing q will randomly play one of key3.mp3 or key4.wav or no sound.
+- pressing j will not play any sound;
+- pressing k will also not play any sound;
+- any other key triggering |InsertCharPre| will play key5.wav;
+- pressing Enter will play the default sound for carriage return;
 - the remaining keys will not play any sound;
-- finally, `ding1.wav` will be played each time Insert mode is exited.
+- finally, ding.mp3 will be played each time Insert mode is exited.
 
 Keys that do not trigger |InsertCharPre|, such as |<Enter>|, |backspace|,
 etc., must not be mapped for KeySound to be able to configure them (see
@@ -113,20 +107,14 @@ threshold must be a positive value.
 >
 	g:keysound_throttle = 20
 <
-CREDITS
+ACKNOWLEGMENTS
 
-- ASCII art: https://asciiart.website/index.php?art=objects/typewriter
-- Sound folders:
-  - daktilo: https://github.com/orhun/daktilo
-  - freesound: https://freesound.org/people/_stubb/sounds/406243/,
-    https://freesound.org/people/tjandrasounds/sounds/201590/,
-    https://freesound.org/people/ramsamba/sounds/318686/
-  - skywind3000: https://github.com/skywind3000/vim-keysound (I discovered
-    that a plugin called keysound existed after I named my own!)
+https://gottcode.org/focuswriter/
+The default sounds are adapted from FocusWriter, a beautiful distraction-free
+editor supporting RTF and ODT formats, besides plain text files.
 
-SEE ALSO
-
-https://github.com/AndrewRadev/typewriter.vim: a similar plugin, in legacy Vim
+https://github.com/AndrewRadev/typewriter.vim
+typewriter.vim is a plugin similar to KeySound, but written in legacy Vim
 script, from which I borrowed the idea of throttling the sounds.
 
  vim:tw=78:ts=8:ft=help:norl:
