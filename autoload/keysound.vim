@@ -13,6 +13,7 @@ const DEFAULT_SOUNDS: dict<list<string>> = {
 
 var gSounds                         = DEFAULT_SOUNDS
 var gMappedKeys:       list<string> = [] # Keeps track of keys mapped by this plugin
+var gConflictingKeys:  list<string> = [] # Keeps track of already mapped keys
 var gPlayingSounds:    number            # Number of simultaneously playing sounds
 var gMaxPlayingSounds: number            # Maximum number of simultaneously playing sounds
 
@@ -84,8 +85,12 @@ enddef
 
 def MapSpecialKeys()
   for key in gSounds->keys()
-    if IsSpecialKey(key) && IsUnmapped(key) && gSounds->HasSoundFor(key)
-      MapSpecialKey(key)
+    if IsSpecialKey(key) && gSounds->HasSoundFor(key)
+      if IsUnmapped(key)
+        MapSpecialKey(key)
+      else
+        gConflictingKeys->add(key)
+      endif
     endif
   endfor
 enddef
@@ -106,6 +111,7 @@ def Enable()
   gPlayingSounds    = 0
   gMaxPlayingSounds = get(g:, 'keysound_throttle', 20)
   gSounds           = deepcopy(DEFAULT_SOUNDS)->extend(userConfig, 'force')
+  gConflictingKeys  = []
 
   for soundFiles in values(gSounds)
     map(soundFiles, (_, sound) => SoundPath(sound))
@@ -157,32 +163,55 @@ export def Toggle()
 enddef
 
 export def Debug()
-  const mappedKeys = mapnew(gMappedKeys, (_, key) => keytrans(key))
-  const config = values(
+  const isOn        = exists('#KeySound')
+  const mappedKeys  = mapnew(gMappedKeys, (_, key) => keytrans(key))
+  const conflicting = mapnew(gConflictingKeys, (_, key) => keytrans(key))
+  const config      = values(
     mapnew(gSounds, (key, paths) => {
-      const soundPaths = mapnew(paths, (_, p) => empty(p) ? '  none' : $'  {p}')
+      const soundPaths = mapnew(paths, (_, p) => empty(p) ? '  no sound' : $'  {p}')
       return [keytrans(key)]->extend(soundPaths)
     }))
 
   var info =<< trim eval END
-  KeySound is {exists('#KeySound') ? 'ON' : 'OFF'}
+    ~~~ STATUS ~~~
+    KeySound is {isOn ? 'ON' : 'OFF'}
 
-  SOUNDS DIRECTORY:
-  {SOUNDS_DIR}
+    ~~~ SOUNDS DIRECTORY ~~~
+    {SOUNDS_DIR}
 
-  MAPPED KEYS:
-  {mappedKeys}
-
-  KEYSOUND CONFIGURATION:
   END
+
+  if isOn
+    var mappedText =<< trim eval END
+      ~~~ KEYS MAPPED BY KEYSOUND ~~~
+      {empty(mappedKeys) ? 'None' : join(mappedKeys, ' ')}
+
+    END
+    info->extend(mappedText)
+  endif
+
+  if isOn && !empty(conflicting)
+    var conflictText =<< trim eval END
+      ~~~ CONFLICTING MAPPINGS ~~~
+      {join(conflicting, ' ')}
+
+    END
+    info->extend(conflictText)
+
+  endif
+
+  info->add('~~~ CONFIGURATION ~~~')
 
   for item in config
     info->extend(item)
   endfor
 
   info->popup_dialog({
+    title: '  KeySound Information  ',
+    drag: 1,
     close: 'button',
-    filter: 'popup_close',
+    filter: (id, k) => k == "\<cr>" || k == "\<esc>" ? popup_close(id) : k,
+    filtermode: 'n',
   })
 enddef
 
