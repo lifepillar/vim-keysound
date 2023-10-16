@@ -110,8 +110,9 @@ threshold must be a positive value.
 ACKNOWLEGMENTS
 
 https://gottcode.org/focuswriter/
-The default sounds are adapted from FocusWriter, a beautiful distraction-free
-editor supporting RTF and ODT formats, besides plain text files.
+The default sounds are from FocusWriter, a beautiful distraction-free editor
+supporting RTF and ODT formats, besides plain text files. FocusWriter and its
+sound files are distributed under the GPLv3.
 
 https://github.com/AndrewRadev/typewriter.vim
 typewriter.vim is a plugin similar to KeySound, but written in legacy Vim
