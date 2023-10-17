@@ -51,6 +51,24 @@ Additional sounds must be put inside the `sounds` folder of this plugin. You
 may get some typewriter sounds from
 [typewriter-sounds](https://github.com/lifepillar/typewriter-sounds).
 
+As an example, the following configuration replicates the sounds of
+[vim-typewriter](https://github.com/AndrewRadev/typewriter.vim), except that
+Enter is associated with a different sound:
+
+    g:keysound = {
+      'default': [
+        'typewriter-sounds/key001.mp3',
+        'typewriter-sounds/key002.mp3',
+        'typewriter-sounds/key003.mp3'
+      ],
+      "\<cr>": ['typewriter-sounds/return003.mp3'],
+      'InsertLeave': ['typewriter-sounds/ding000.mp3'],
+      'InsertEnter': ['typewriter-sounds/return001.mp3'],
+    }
+
+This assumes that typewriter-sounds has been cloned into the `sounds`
+directory.
+
 See `:help keysound.txt` for the full documentation.
 
 
@@ -61,4 +79,4 @@ Vim license.
 
 ## Credits and Acknowledgements
 
-See `doc/keysound.txt`.
+See `:help keysounds-credits`.

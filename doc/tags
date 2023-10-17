@@ -5,4 +5,5 @@
 g:keysound	keysound.txt	/*g:keysound*
 g:keysound_throttle	keysound.txt	/*g:keysound_throttle*
 keysound	keysound.txt	/*keysound*
+keysound-credits	keysound.txt	/*keysound-credits*
 keysound.txt	keysound.txt	/*keysound.txt*
