@@ -11,6 +11,7 @@ const DEFAULT_SOUNDS: dict<list<string>> = {
     "\<cr>": ['return.mp3'],
 }
 
+var gEnabled:          bool         = false
 var gSounds                         = DEFAULT_SOUNDS
 var gMappedKeys:       list<string> = [] # Keeps track of keys mapped by this plugin
 var gConflictingKeys:  list<string> = [] # Keeps track of already mapped keys
@@ -47,15 +48,17 @@ def SoundFileFor(keyOrEvent: string): string
 enddef
 
 export def PlaySoundFor(keyOrEvent: string): string
-  const soundFile = SoundFileFor(keyOrEvent)
+  if gEnabled
+    const soundFile = SoundFileFor(keyOrEvent)
 
-  if !empty(soundFile) && gPlayingSounds < gMaxPlayingSounds
-    gPlayingSounds += 1
+    if !empty(soundFile) && gPlayingSounds < gMaxPlayingSounds
+      gPlayingSounds += 1
 
-    if sound_playfile(soundFile, (id, _) => {
+      if sound_playfile(soundFile, (id, _) => {
+        gPlayingSounds -= 1
+      }) == 0
       gPlayingSounds -= 1
-    }) == 0
-    gPlayingSounds -= 1
+      endif
     endif
   endif
 
@@ -129,6 +132,7 @@ def Enable()
   augroup END
 
   MapSpecialKeys()
+  gEnabled = true
 
   echomsg '[KeySound] On'
 enddef
@@ -139,6 +143,7 @@ def Disable()
 
   UnmapSpecialKeys()
 
+  gEnabled = false
   echomsg '[KeySound] Off'
 enddef
 
@@ -163,7 +168,6 @@ export def Toggle()
 enddef
 
 export def Debug()
-  const isOn        = exists('#KeySound')
   const mappedKeys  = mapnew(gMappedKeys, (_, key) => keytrans(key))
   const conflicting = mapnew(gConflictingKeys, (_, key) => keytrans(key))
   const config      = values(
@@ -178,14 +182,14 @@ export def Debug()
        ╰━━━━━━━━━━━━━━━━━━━╯
 
     ~~~ STATUS ~~~
-    KeySound is {isOn ? 'ON' : 'OFF'}
+    KeySound is {gEnabled ? 'ON' : 'OFF'}
 
     ~~~ SOUNDS DIRECTORY ~~~
     {SOUNDS_DIR}
 
   END
 
-  if isOn
+  if gEnabled
     var mappedText =<< trim eval END
       ~~~ KEYS MAPPED BY KEYSOUND ~~~
       {empty(mappedKeys) ? 'None' : join(mappedKeys, ' ')}
@@ -194,7 +198,7 @@ export def Debug()
     info->extend(mappedText)
   endif
 
-  if isOn && !empty(conflicting)
+  if gEnabled && !empty(conflicting)
     var conflictText =<< trim eval END
       ~~~ CONFLICTING MAPPINGS ~~~
       {join(conflicting, ' ')}
