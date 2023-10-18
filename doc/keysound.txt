@@ -107,7 +107,7 @@ threshold must be a positive value.
 >
 	g:keysound_throttle = 20
 <
-PlaySoundFor({key} [, {flag}])			*PlaySoundFor()*
+PlaySoundFor({key} [, {flag}])			*keysound.PlaySoundFor()*
 		Plays the sound corresponding to the given {key}. The sound is
 		played only if KeySound is on. Returns {key} unless {flag} is
 		set to false, in which case returns an empty string.
