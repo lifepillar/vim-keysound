@@ -47,18 +47,16 @@ def SoundFileFor(keyOrEvent: string): string
   return sounds[rand() % n]
 enddef
 
-export def PlaySoundFor(keyOrEvent: string): string
-  if gEnabled
-    const soundFile = SoundFileFor(keyOrEvent)
+def PlaySound(keyOrEvent: string): string
+  const soundFile = SoundFileFor(keyOrEvent)
 
-    if !empty(soundFile) && gPlayingSounds < gMaxPlayingSounds
-      gPlayingSounds += 1
+  if !empty(soundFile) && gPlayingSounds < gMaxPlayingSounds
+    gPlayingSounds += 1
 
-      if sound_playfile(soundFile, (id, _) => {
-        gPlayingSounds -= 1
-      }) == 0
+    if sound_playfile(soundFile, (id, _) => {
       gPlayingSounds -= 1
-      endif
+    }) == 0
+    gPlayingSounds -= 1
     endif
   endif
 
@@ -82,7 +80,7 @@ def IsUnmapped(key: string): bool
 enddef
 
 def MapSpecialKey(key: string)
-  execute $'inoremap <expr> {keytrans(key)} PlaySoundFor("{key}")'
+  execute $'inoremap <expr> {keytrans(key)} PlaySound("{key}")'
   gMappedKeys->add(key)
 enddef
 
@@ -122,11 +120,11 @@ def Enable()
 
   augroup KeySound
     autocmd!
-    autocmd InsertCharPre * PlaySoundFor(v:char)
+    autocmd InsertCharPre * PlaySound(v:char)
 
     for name in keys(gSounds)
       if IsEvent(name)
-        execute $"autocmd {name} * PlaySoundFor('{name}')"
+        execute $"autocmd {name} * PlaySound('{name}')"
       endif
     endfor
   augroup END
@@ -165,6 +163,18 @@ export def Toggle()
   else
     Enable()
   endif
+enddef
+
+export def PlaySoundFor(key: string, returnKey: bool = true): string
+  if gEnabled
+    PlaySound(key)
+  endif
+
+  if returnKey
+    return key
+  endif
+
+  return ''
 enddef
 
 export def Debug()
@@ -238,12 +248,4 @@ export def Debug()
     filter:     Filter,
     filtermode: 'n',
   })
-enddef
-
-var i = 0
-
-def Foo(k: string): string
-  i += 1
-  echo $"Mouse pressed! {i}"
-  return k
 enddef
