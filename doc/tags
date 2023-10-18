@@ -2,8 +2,10 @@
 :KeySoundOff	keysound.txt	/*:KeySoundOff*
 :KeySoundOn	keysound.txt	/*:KeySoundOn*
 :KeySoundToggle	keysound.txt	/*:KeySoundToggle*
+PlaySoundFor()	keysound.txt	/*PlaySoundFor()*
 g:keysound	keysound.txt	/*g:keysound*
 g:keysound_throttle	keysound.txt	/*g:keysound_throttle*
 keysound	keysound.txt	/*keysound*
+keysound-conflicts	keysound.txt	/*keysound-conflicts*
 keysound-credits	keysound.txt	/*keysound-credits*
 keysound.txt	keysound.txt	/*keysound.txt*

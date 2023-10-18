@@ -1,4 +1,4 @@
-*keysound.txt*	For Vim version 9.0	Last change: 2023 Oct 17
+*keysound.txt*	For Vim version 9.0	Last change: 2023 Oct 18
 
 	                            /`*_ ~
 	                            /    `-_ ~
@@ -107,6 +107,70 @@ threshold must be a positive value.
 >
 	g:keysound_throttle = 20
 <
+PlaySoundFor({key} [, {flag}])			*PlaySoundFor()*
+		Plays the sound corresponding to the given {key}. The sound is
+		played only if KeySound is on. Returns {key} unless {flag} is
+		set to false, in which case returns an empty string.
+		This function may be used in plugs to enable sounds for keys
+		that are already mapped. See an example in the section below.
+
+==============================================================================
+CONFLICTING MAPPINGS				*keysound-conflicts*
+
+If a key is already mapped by the user or by another plugin, it will play no
+sound even if it is configured in |g:keysound|, because KeySound never
+overwrites existing mappings: it wouldn't be polite. Make sure KeySound is on,
+and check for conflicts with |:KeySoundDebug|.
+
+You have to resolve such conflicts yourself, because how to solve them very
+much depends on how the mappings were defined.
+
+For example, if you use Auto Pairs, which defines mappings for <cr>, <bs>, and
+<space> among the rest, you may add this to your |vimrc|:
+>
+	vim9script
+
+	import '/path/to/keysound/autoload/keysound.vim'
+
+	g:AutoPairsMapCR = 0
+	g:AutoPairsMapBS = 0
+
+	inoremap <expr> <plug>keysoundCR keysound.PlaySoundFor("\<cr>")
+	inoremap <expr> <plug>keysoundBS keysound.PlaySoundFor("\<bs>", false)
+	inoremap <expr> <plug>autopairsBS g:AutoPairsDelete()
+
+	imap <cr> <plug>keysoundCR<plug>AutoPairsReturn
+	imap <bs> <plug>autopairsBS<plug>keysoundBS
+
+	# Silence some characters to avoid double sounds:
+	g:keysound = {
+	  "\<space>": [],
+	         '[': [],
+	         '{': [],
+	       # etc.
+	}
+<
+The above is for a |vimrc| written in Vim 9 script. If your |vimrc| is written
+in legacy Vim script, the equivalent snippet looks as follows:
+>
+	let g:AutoPairsMapCR = 0
+	let g:AutoPairsMapBS = 0
+
+	inoremap <expr> <plug>keysoundCR keysound#PlaySoundFor("\<cr>")
+	inoremap <expr> <plug>keysoundBS keysound#PlaySoundFor("\<bs>", 0)
+	inoremap <expr> <plug>autopairsBS AutoPairsDelete()
+
+	imap <cr> <plug>keysoundCR<plug>AutoPairsReturn
+	imap <bs> <plug>autopairsBS<plug>keysoundBS
+
+	let g:keysound {
+	  \ "\<space": [],
+	  \       '[': [],
+	  \       '{': [],
+	  \       etc.
+	  \ }
+<
+==============================================================================
 ACKNOWLEDGMENTS					*keysound-credits*
 
 https://gottcode.org/focuswriter/
@@ -121,4 +185,4 @@ script, from which I borrowed the idea of throttling the sounds.
 https://asciiart.website/index.php?art=objects/typewriter
 Where the ASCII art typewriter in this help file comes from.
 
- vim:tw=78:ts=8:ft=help:norl:
+ vim:tw=78:ts=8:noet:ft=help:norl:
