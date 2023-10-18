@@ -72,6 +72,11 @@ directory.
 See `:help keysound.txt` for the full documentation.
 
 
+## Troubleshooting
+
+See `:help :KeySoundDebug` and `:help keysound-conflicts`.
+
+
 ## License
 
 Vim license.
