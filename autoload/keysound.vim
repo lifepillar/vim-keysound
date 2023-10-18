@@ -173,6 +173,10 @@ export def Debug()
     }))
 
   var info =<< trim eval END
+       ╭───────────────────╮
+       │ COPY TO CLIPBOARD │
+       ╰━━━━━━━━━━━━━━━━━━━╯
+
     ~~~ STATUS ~~~
     KeySound is {isOn ? 'ON' : 'OFF'}
 
@@ -206,12 +210,36 @@ export def Debug()
     info->extend(item)
   endfor
 
+  def Filter(winid: number, key: string): string
+    if key == "\<cr>" || key == "\<esc>"
+      popup_close(winid)
+    elseif key == "\<LeftMouse>"
+      const mousepos = getmousepos()
+
+      if mousepos.winid == winid &&
+          mousepos.winrow > 1 && mousepos.winrow < 5 &&
+          mousepos.wincol > 2 && mousepos.wincol < 24
+        @* = join(getbufline(winbufnr(winid), 5, '$'), "\n")
+        echomsg "[KeySound] Info copied to system clipboard!"
+      endif
+    endif
+
+    return key
+  enddef
+
   info->popup_dialog({
-    title: '  KeySound Information  ',
-    drag: 1,
-    close: 'button',
-    filter: (id, k) => k == "\<cr>" || k == "\<esc>" ? popup_close(id) : k,
+    title:      '  KeySound Information  ',
+    drag:       1,
+    close:      'button',
+    filter:     Filter,
     filtermode: 'n',
   })
 enddef
 
+var i = 0
+
+def Foo(k: string): string
+  i += 1
+  echo $"Mouse pressed! {i}"
+  return k
+enddef
