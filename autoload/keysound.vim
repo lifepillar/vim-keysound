@@ -46,7 +46,7 @@ def SoundFileFor(keyOrEvent: string): string
   return sounds[rand() % n]
 enddef
 
-def PlaySoundFor(keyOrEvent: string): string
+export def PlaySoundFor(keyOrEvent: string): string
   const soundFile = SoundFileFor(keyOrEvent)
 
   if !empty(soundFile) && gPlayingSounds < gMaxPlayingSounds
