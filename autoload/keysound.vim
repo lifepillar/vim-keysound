@@ -194,6 +194,9 @@ export def Debug()
       const soundPaths = mapnew(paths, (_, p) => empty(p) ? '  no sound' : $'  {p}')
       return [keytrans(key)]->extend(soundPaths)
     }))
+  const status = gEnabled ? 'ON' : 'OFF'
+  const events = get(g:, 'keysound_toggle_event_sounds', true) ? status : 'ALWAYS ON'
+  const throttle = get(g:, 'keysound_throttle', 20)
 
   var info =<< trim eval END
        ╭───────────────────╮
@@ -201,7 +204,9 @@ export def Debug()
        ╰━━━━━━━━━━━━━━━━━━━╯
 
     ~~~ STATUS ~~~
-    KeySound is {gEnabled ? 'ON' : 'OFF'}
+    KeySound is {status}
+    Events sounds are {events}
+    Max number of simultaneous sounds is {throttle}
 
     ~~~ SOUNDS DIRECTORY ~~~
     {SOUNDS_DIR}
