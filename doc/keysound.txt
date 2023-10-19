@@ -99,6 +99,12 @@ The available sound files are located inside the `sounds` folder of the
 plugin. You may add your own sounds there. The supported formats vary with the
 platform, but at least `.wav` and `.mp3` files should work.
 
+						*g:keysound_toggle_event_sounds*
+When set to false, sounds associated to events are played even when KeySound
+is off. That is, only keyboard sounds are toggled.
+>
+	g:keysound_toggle_event_sounds = true
+<
 						*g:keysound_throttle*
 Maximum number of simultaneous sounds to play. When typing fast and this
 threshold is exceeded, sounds are skipped for additional key presses long as

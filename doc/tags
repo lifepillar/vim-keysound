@@ -4,6 +4,7 @@
 :KeySoundToggle	keysound.txt	/*:KeySoundToggle*
 g:keysound	keysound.txt	/*g:keysound*
 g:keysound_throttle	keysound.txt	/*g:keysound_throttle*
+g:keysound_toggle_event_sounds	keysound.txt	/*g:keysound_toggle_event_sounds*
 keysound	keysound.txt	/*keysound*
 keysound-conflicts	keysound.txt	/*keysound-conflicts*
 keysound-credits	keysound.txt	/*keysound-credits*

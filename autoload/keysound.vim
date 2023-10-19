@@ -121,6 +121,10 @@ def Enable()
   augroup KeySound
     autocmd!
     autocmd InsertCharPre * PlaySound(v:char)
+  augroup END
+
+  augroup KeySoundEvent
+    autocmd!
 
     for name in keys(gSounds)
       if IsEvent(name)
@@ -136,6 +140,11 @@ def Enable()
 enddef
 
 def Disable()
+  if get(g:, 'keysound_toggle_event_sounds', true)
+    autocmd! KeySoundEvent
+    augroup! KeySoundEvent
+  endif
+
   autocmd! KeySound
   augroup! KeySound
 
