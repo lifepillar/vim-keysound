@@ -191,7 +191,16 @@ export def Debug()
   const conflicting = mapnew(gConflictingKeys, (_, key) => keytrans(key))
   const config      = values(
     mapnew(gSounds, (key, paths) => {
-      const soundPaths = mapnew(paths, (_, p) => empty(p) ? '  no sound' : $'  {p}')
+      const soundPaths = mapnew(paths, (_, p) => {
+        if empty(p)
+          return '  No sound'
+        elseif !gEnabled || filereadable(p)
+          return $'  {p}'
+        else
+          return $'  [MISSING] {p}'
+        endif
+      })
+
       return [keytrans(key)]->extend(soundPaths)
     }))
   const status = gEnabled ? 'ON' : 'OFF'
