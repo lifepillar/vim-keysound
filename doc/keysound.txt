@@ -1,4 +1,4 @@
-*keysound.txt*	For Vim version 9.0	Last change: 2023 Oct 18
+*keysound.txt*	For Vim version 9.0	Last change: 2023 Oct 21
 
 	                            /`*_ ~
 	                            /    `-_ ~
@@ -53,8 +53,8 @@ A |dict| to configure which sounds should be played for each key press. This
 is the default configuration:
 >
 	g:keysound = {
-	  'default': ['key.mp3'],
-	    "\<cr>": ['return.mp3'],
+	  'default': ['keyany.wav'],
+	    "\<cr>": ['keyenter.wav'],
 	}
 <
 Users may define `g:keysound` in their |vimrc| to extend or override the
@@ -97,7 +97,8 @@ mappings yourself.
 
 The available sound files are located inside the `sounds` folder of the
 plugin. You may add your own sounds there. The supported formats vary with the
-platform, but at least `.wav` and `.mp3` files should work.
+platform, although probably WAV is the most compatible across libraries. Other
+formats that may be supported by your platform include MP3 and Ogg/Vorbis.
 
 						*g:keysound_toggle_event_sounds*
 When set to false, sounds associated to events are played even when KeySound

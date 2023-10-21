@@ -7,8 +7,8 @@ const SLASH      = !exists("+shellslash") || &shellslash ? '/' : '\'
 const SOUNDS_DIR = $"{resolve(expand('<sfile>:p:h:h'))}{SLASH}sounds{SLASH}"
 
 const DEFAULT_SOUNDS: dict<list<string>> = {
-  'default': ['key.mp3'],
-    "\<cr>": ['return.mp3'],
+  'default': ['keyany.wav'],
+    "\<cr>": ['keyenter.wav'],
 }
 
 var gEnabled:          bool         = false
