@@ -57,13 +57,13 @@ Enter is associated with a different sound:
 
     g:keysound = {
       'default': [
-        'typewriter-sounds/key001.mp3',
-        'typewriter-sounds/key002.mp3',
-        'typewriter-sounds/key003.mp3'
+        'typewriter-sounds/key001.wav',
+        'typewriter-sounds/key002.wav',
+        'typewriter-sounds/key003.wav'
       ],
-      "\<cr>": ['typewriter-sounds/return003.mp3'],
-      'InsertLeave': ['typewriter-sounds/ding000.mp3'],
-      'InsertEnter': ['typewriter-sounds/return001.mp3'],
+      "\<cr>":       ['typewriter-sounds/return003.wav'],
+      'InsertLeave': ['typewriter-sounds/ding000.wav'],
+      'InsertEnter': ['typewriter-sounds/return001.wav'],
     }
 
 This assumes that typewriter-sounds has been cloned into the `sounds`

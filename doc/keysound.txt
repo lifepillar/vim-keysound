@@ -1,4 +1,4 @@
-*keysound.txt*	For Vim version 9.0	Last change: 2023 Oct 21
+*keysound.txt*	For Vim version 9.0	Last change: 2023 Oct 23
 
 	                            /`*_ ~
 	                            /    `-_ ~
@@ -68,26 +68,26 @@ a sound for a specific key, map it to an empty list or use |null_string| or an
 empty string. For example:
 >
 	g:keysound = {
-	    "\<bs>":       ['key001.mp3'],
-	    'f':           ['key002.mp3'],
-	    'q':           ['key003.mp3', 'key004.mp3', ''],
+	    "\<bs>":       ['key001.wav'],
+	    'f':           ['key002.wav'],
+	    'q':           ['key003.wav', 'key004.wav', ''],
 	    'j':           [],
 	    'k':           [null_string],
-	    'default':     ['key005.mp3'],
-	    'InsertLeave': ['ding000.mp3'],
+	    'default':     ['key005.wav'],
+	    'InsertLeave': ['ding000.wav'],
 	}
 <
 With the configuration above:
 
-- pressing Backspace will play key001.mp3;
-- pressing f will play key002.mp3;
-- pressing q will randomly play one of key003.mp3 or key004.mp3 or no sound.
+- pressing Backspace will play key001.wav;
+- pressing f will play key002.wav;
+- pressing q will randomly play one of key003.wav or key004.wav or no sound.
 - pressing j will not play any sound;
 - pressing k will also not play any sound;
-- any other key triggering |InsertCharPre| will play key5.mp3;
+- any other key triggering |InsertCharPre| will play key5.wav;
 - pressing Enter will play the default sound for carriage return;
 - the remaining keys will not play any sound;
-- finally, ding000.mp3 will be played each time Insert mode is exited.
+- finally, ding000.wav will be played each time Insert mode is exited.
 
 Keys that do not trigger |InsertCharPre|, such as |<Enter>|, |backspace|,
 etc., must not be mapped for KeySound to be able to configure them (see
