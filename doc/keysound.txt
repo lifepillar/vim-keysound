@@ -108,9 +108,9 @@ is off. That is, only keyboard sounds are toggled.
 <
 						*g:keysound_throttle*
 Maximum number of simultaneous sounds to play. When typing fast and this
-threshold is exceeded, sounds are skipped for additional key presses long as
-the number of simultaneously playing sounds is higher that the threshold. The
-threshold must be a positive value.
+threshold is exceeded, sounds are skipped for additional key presses as long
+as the number of simultaneously playing sounds is higher that the threshold.
+The threshold must be a positive value.
 >
 	g:keysound_throttle = 20
 <
@@ -118,8 +118,9 @@ PlaySoundFor({key} [, {flag}])			*keysound.PlaySoundFor()*
 		Plays the sound corresponding to the given {key}. The sound is
 		played only if KeySound is on. Returns {key} unless {flag} is
 		set to false, in which case returns an empty string.
-		This function may be used in plugs to enable sounds for keys
-		that are already mapped. See an example in the section below.
+		This function may be used in user mappings to enable sounds
+		for keys that are already mapped. See an example in the
+		section below.
 
 ==============================================================================
 CONFLICTING MAPPINGS				*keysound-conflicts*
