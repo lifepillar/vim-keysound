@@ -247,9 +247,11 @@ export def Debug()
     info->extend(item)
   endfor
 
-  def Filter(winid: number, key: string): string
+  def Filter(winid: number, key: string): bool
     if key == "\<cr>" || key == "\<esc>"
       popup_close(winid)
+      return true
+
     elseif key == "\<LeftMouse>"
       const mousepos = getmousepos()
 
@@ -258,10 +260,12 @@ export def Debug()
           mousepos.wincol > 2 && mousepos.wincol < 24
         @* = join(getbufline(winbufnr(winid), 5, '$'), "\n")
         echomsg "[KeySound] Info copied to system clipboard!"
+
+        return true
       endif
     endif
 
-    return key
+    return false
   enddef
 
   info->popup_dialog({
