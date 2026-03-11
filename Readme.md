@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **As of March 11, 2026, this repository is on [Codeberg](https://codeberg.org/lifepillar/vim-keysound).**
+
 # KeySound: Turn Vim into a Typewriter
 
                                         /`*_
